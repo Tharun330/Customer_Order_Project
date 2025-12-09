@@ -15,7 +15,7 @@
 ## How to Run the Application
 
 ```bash
-git clone https://github.com/Tharun330/ProjectOne.git
+git clone https://github.com/Tharun330/Customer_Order_Project.git
 cd ProjectOne-Backend
 docker compose up --build
 
