@@ -1,0 +1,37 @@
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: projectone-postgres
+    environment:
+      POSTGRES_DB: customer_order_microservice
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+    ports:
+      - "5432:5432"         
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d customer_order_microservice"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  app:
+    build: .
+    container_name: projectone-app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: customer_order_microservice
+      DB_USER: postgres
+      DB_PASS: postgres123
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+volumes:
+  pgdata:
